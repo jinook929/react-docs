@@ -244,7 +244,8 @@ class Clock extends React.Component {
     this.state = {date: new Date()};
   }
 
-  tick() {
+  tick = () => {
+    console.log(this.timerID);
     this.setState({date: new Date()});
   }
 
