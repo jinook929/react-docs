@@ -272,3 +272,80 @@ class Clock extends React.Component {
 }
 
 ReactDOM.render(<Clock />, document.getElementById('root05'));
+
+
+
+// 6. Handling Events
+// // HTML ======================
+// <button onclick="activateLasers()">
+//   activate Lasers
+// </button>
+// // JSX ======================
+// <button onClick={activateLasers}>
+//   Activate Lasers
+// </button>
+
+// // HTML ======================
+// <a href="#" onclick="return false">Click me</a>
+// JSX ======================
+function ActionLink() {
+
+  function activateLasers(e, message) {
+    console.log(e.type, e.target)
+    console.log(message)
+    document.getElementById("handleClickMsg").innerHTML = (message);
+    // "<strong>Lasers Activated!!!</strong>";
+  }
+
+  function handleClick(e) {
+    e.preventDefault();
+  }
+
+  return (
+    <div>
+      <h1>06. Handling Events</h1>
+      {/* how to add eventhandler in JSX */}
+      <button onClick={(e)=>activateLasers(e, "<strong>Lasers Activated!!!</strong>")}>
+        Activate Lasers
+      </button>
+      <div id="handleClickMsg">Lasers ready</div>
+      {/* how to prevent default behavior in React */}
+      <a href="#" onClick={handleClick}>
+        Click me
+      </a>
+    </div>
+  );
+}
+
+ReactDOM.render(<ActionLink />, document.getElementById('root06'));
+
+class Toggle extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log('constructor')
+    this.state = {isToggleOn: true}
+    this.handleClick = this.handleClick.bind(this)
+  }
+
+  handleClick = () => {
+    console.log('handleClick')
+    this.setState(state => ({
+      isToggleOn: !this.state.isToggleOn
+    }))
+  }
+
+  render() {
+    console.log('render')
+    console.log(this.state.isToggleOn)
+    return (
+      <div>
+        <h3>Toggle Button</h3>
+        <button onClick={this.handleClick}>
+          {this.state.isToggleOn ? 'ON' : 'OFF'}
+        </button>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<Toggle />, document.getElementById('root06_'));
