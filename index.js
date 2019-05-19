@@ -528,3 +528,73 @@ class Page extends React.Component {
 }
 
 ReactDOM.render(<Page />, document.getElementById('root07____'))
+
+
+
+// 8. Lists and Keys
+const numbers = [1, 2, 3, 4, 5];
+const doubles = numbers.map(num => num * 2);
+console.log(doubles)
+
+const listItems = numbers.map((num, index) => {
+  console.log('listItem', index)
+  return (
+    <li key={index}>{num}</li>
+  )
+})
+
+ReactDOM.render(<div><h1>08. Lists and Keys</h1><ul style={{textAlign:'left'}}>{listItems}</ul></div>, document.getElementById('root08'))
+
+function ListItem(props) {
+  const value = props.value;
+  console.log('ListItem', props)
+  return (
+    <li>{value}</li>
+  )
+}
+
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItems = numbers.map((num) => {
+    console.log('key & value:', num.toString(), '&', num); 
+    return <ListItem key={num.toString()} value={num} />
+  });
+
+  return (
+    <ul>{listItems}</ul>
+  );
+}
+
+ReactDOM.render(<NumberList numbers={numbers} />, document.getElementById('root08_'))
+
+const posts = [
+  {id: 1, title: 'Hello World', content: 'Welcome to learning React!'},
+  {id: 2, title: 'Installation', content: 'You can install React from npm.'}
+];
+
+function Blog (props) {
+  const sidebar = (
+    <ul>
+      {props.posts.map(post => 
+        <li key={post.id}>{post.title}</li>
+      )}
+    </ul>
+  );
+
+  const content = props.posts.map(post => 
+    <div key={post.id}>
+      <h3>{post.title}</h3>
+      <p>{post.content}</p>
+    </div>
+  );
+
+  return (
+    <div>
+      {sidebar}
+      <hr />
+      {content}
+    </div>
+  );
+}
+
+ReactDOM.render(<Blog posts={posts} />, document.getElementById('root08__'))
