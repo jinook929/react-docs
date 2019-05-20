@@ -567,34 +567,61 @@ function NumberList(props) {
 
 ReactDOM.render(<NumberList numbers={numbers} />, document.getElementById('root08_'))
 
-const posts = [
-  {id: 1, title: 'Hello World', content: 'Welcome to learning React!'},
-  {id: 2, title: 'Installation', content: 'You can install React from npm.'}
-];
+// function Blog (props) {
+//   const sidebar = (
+//     <ul>
+//       {props.posts.map(post => 
+//         <li key={post.id}>{post.title}</li>
+//       )}
+//     </ul>
+//   );
 
-function Blog (props) {
-  const sidebar = (
+//   const content = props.posts.map(post => 
+//     <div key={post.id}>
+//       <h3>{post.title}</h3>
+//       <p>{post.content}</p>
+//     </div>
+//   );
+
+//   return (
+//     <div>
+//       {sidebar}
+//       <hr />
+//       {content}
+//     </div>
+//   );
+// }
+
+class Blog extends React.Component {
+  sidebar = (
     <ul>
-      {props.posts.map(post => 
+      {this.props.posts.map(post => 
         <li key={post.id}>{post.title}</li>
       )}
     </ul>
   );
 
-  const content = props.posts.map(post => 
+  content = (this.props.posts.map(post => 
     <div key={post.id}>
       <h3>{post.title}</h3>
       <p>{post.content}</p>
     </div>
-  );
+  ));
 
-  return (
-    <div>
-      {sidebar}
-      <hr />
-      {content}
-    </div>
-  );
+  render() {
+    return (
+      <div>
+        {this.sidebar}
+        <hr />
+        {this.content}
+      </div>
+    );
+  }
 }
+
+const posts = [
+  {id: 1, title: 'Hello World', content: 'Welcome to learning React!'},
+  {id: 2, title: 'Installation', content: 'You can install React from npm.'}
+];
 
 ReactDOM.render(<Blog posts={posts} />, document.getElementById('root08__'))
