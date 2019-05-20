@@ -625,3 +625,134 @@ const posts = [
 ];
 
 ReactDOM.render(<Blog posts={posts} />, document.getElementById('root08__'))
+
+
+
+// 9. Forms
+class NameForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: ""};
+  }
+
+  handleChange = (event) => {
+    return this.setState({value: event.target.value})
+  }
+
+  handleSubmit = (event) => {
+    alert('A name was submitted: ' + this.state.value);
+    event.preventDefault();
+  }
+
+  render(){
+    return (
+      <div>
+        <h1>09. Forms</h1>
+        <form onSubmit={this.handleSubmit}>
+          <label>Name: </label>
+          <input type="text" value={this.state.value} onChange={this.handleChange} />
+          <input type="submit" value="SUBMIT" />
+        </form>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<NameForm />, document.getElementById('root09'))
+
+class EssayForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: "Write your essay here."}
+  }
+
+  handleChange = (e) => {
+    return this.setState({value: e.target.value})
+  }
+
+  handleSubmit = (e) => {
+    alert('An essay was submitted: ' + this.state.value)
+    e.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>Essay: </label>
+        <textarea value={this.state.value} onChange={this.handleChange} />
+        <input type="submit" value="SUBMIT" />
+      </form>
+    );
+  }
+}
+
+ReactDOM.render(<EssayForm />, document.getElementById('root09_'))
+
+class FlavorForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: 'coconut'};
+  }
+
+  handleChange = (e) => {
+    this.setState({value: e.target.value});
+  }
+
+  handleSubmit = (e) => {
+    alert('Your favorite flavor is ' + this.state.value);
+    e.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>Favorite Flavor: </label>
+        <select value={this.state.value} onChange={this.handleChange}>
+          <option value="grapefruit">Grapefruit</option>
+          <option value="lime">Lime</option>
+          <option value="coconut">Coconut</option>
+          <option value="mango">Mango</option>
+        </select>
+        <input type="submit" value="SUBMIT" />
+      </form>
+    );
+  }
+}
+
+ReactDOM.render(<FlavorForm />, document.getElementById('root09__'))
+
+class Reservation extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isGoing: true,
+      numberOfGuests: 2
+    };
+  }
+
+  handleInputChange = (e) => {
+    const target = e.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <form>
+          <label>Is Going? </label>
+          <input type="checkbox" name="isGoing" checked={this.state.isGoing} onChange={this.handleInputChange} />
+          <br />
+          <label>Number of Guests: </label>
+          <input type="number" name="numberOfGuests" value={this.state.numberOfGuests} onChange={this.handleInputChange} />
+        </form>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<Reservation />, document.getElementById('root09___'))
