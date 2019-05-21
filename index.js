@@ -781,6 +781,7 @@ class Calculator extends React.Component {
     const temperature = this.state.temperature;
     return (
       <div>
+        <h1>10. Lifting State Up</h1>
         <fieldset>
           <legend>Enter temperature in Celsius</legend>
           <input type="text" value={temperature} onChange={this.handleChange} />
@@ -869,3 +870,91 @@ ReactDOM.render(<Calculator_ />, document.getElementById('root10_'))
 
 
 // 11. Composition vs Inheritance
+function FancyBorder(props) {
+  return (
+    <div className={'FancyBorder FancyBorder-' + props.color}>
+      {props.children}
+    </div>
+  );
+}
+
+function WelcomeDialog () {
+  return (
+    <div>
+      <h1>11. Composition vs Inheritance</h1>
+      <FancyBorder color= "blue">
+        <h2 className="Dialog-title">Welcome</h2>
+        <p className="Dialog-message">Thank you for visiting our spacecraft!</p>
+      </FancyBorder>
+    </div>
+  );
+}
+
+ReactDOM.render(<WelcomeDialog />, document.getElementById('root11'))
+
+function SplitPane(props) {
+  return (
+    <div className="SplitPane">
+      <div className="SplitPane-left">
+        {props.left}
+      </div>
+      <div className="SplitPane-right">
+        {props.right}
+      </div>
+    </div>
+  );
+}
+
+function Contacts() {
+  return <div className="Contacts" />;
+}
+
+function Chat() {
+  return <div className="Chat" />;
+}
+
+function App11() {
+  return (
+    <SplitPane left={<Contacts />} right={<Chat />} />
+  );
+}
+
+ReactDOM.render(<App11 />, document.getElementById('root11_'));
+
+function Dialog(props) {
+  return (
+    <FancyBorder color="blue">
+      <h2 className="Dialog-title">{props.title}</h2>
+      <p className="Dialog-message">{props.message}</p>
+      {props.children}
+    </FancyBorder>
+  )
+}
+
+class SignUpDialog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {login: ""};
+  }
+
+  render() {
+    return (
+    <div>
+      <Dialog title="Welcome" message="Thank you for visiting!!!">
+        <input value={this.state.login} onChange={this.handleChange} />
+        <button onClick={this.handleSignUp}>Sign Me Up!</button>
+      </Dialog>
+    </div>
+    );
+  }
+
+  handleChange = (e) => {
+    this.setState({login: e.target.value});console.log(e.target.value)
+  }
+
+  handleSignUp = () => {
+    alert(`Welcome, ${this.state.login}!`);
+  }
+}
+
+ReactDOM.render(<SignUpDialog />, document.getElementById('root11__'));
