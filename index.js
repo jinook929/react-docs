@@ -756,3 +756,116 @@ class Reservation extends React.Component {
 }
 
 ReactDOM.render(<Reservation />, document.getElementById('root09___'))
+
+
+
+// 10. Lifting State Up
+function BoilingVerdict(props) {
+  if(props.celsius >= 100) {
+    return <p>The water would boil.</p>;
+  }
+  return <p>The water would not boil.</p>;
+}
+
+class Calculator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {temperature: ""}
+  }
+
+  handleChange = (e) => {
+    this.setState({temperature: e.target.value})
+  }
+
+  render() {
+    const temperature = this.state.temperature;
+    return (
+      <div>
+        <fieldset>
+          <legend>Enter temperature in Celsius</legend>
+          <input type="text" value={temperature} onChange={this.handleChange} />
+          <BoilingVerdict celsius={parseFloat(temperature)} />
+        </fieldset>
+        <br /><br />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<Calculator />, document.getElementById('root10'));
+
+const scaleNames = {
+  c: 'Celsius',
+  f: 'Fahrenheit'
+};
+
+class TemperatureInput extends React.Component {
+  handleChange = (e) => {
+    // before: this.setState({temperature: e.target.value});
+    this.props.onTemperatureChange(e.target.value);console.log('handleChange', this.props)
+  }
+
+  render() {console.log('TemperatureInput',this.props)
+    // before: const temperature = this.state.temperature;
+    const temperature = this.props.temperature;
+    const scale = this.props.scale; console.log('render(TemperatureInput)')
+    return (
+      <fieldset>{console.log('render(TemperatureInput(return))')}
+        <legend>Enter temperature in {scaleNames[scale]}:</legend>
+        <input value={temperature} onChange={this.handleChange} />
+      </fieldset>
+    );
+  }
+}
+
+function toCelsius(fahrenheit) {
+  return (fahrenheit - 32) * 5 / 9;
+}
+function toFahrenheit(celsius) {
+  return (celsius * 9 / 5) + 32;
+}
+function tryConvert(temperature, convert) {
+  const input = parseFloat(temperature);
+  if(Number.isNaN(input)) {
+    return "";
+  }
+  const output = convert(input);
+  const rounded = Math.round(output * 1000) / 1000;console.log('tryConvert')
+  return rounded.toString();
+}
+
+class Calculator_ extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {scale: '', temperature: ''};
+  }
+
+  handleCelsiusChange = (temperature) => {
+    this.setState({scale: 'c', temperature: temperature});console.log('handleCelsiusChange', this.state)
+  }
+
+  handleFahrenheitChange = (temperature) => {
+    this.setState({scale: 'f', temperature: temperature});console.log('handleFahrenheitChange', this.state)
+  }
+
+  render() {
+    const scale = this.state.scale;console.log(scale)
+    const temperature = this.state.temperature;console.log(temperature)
+    const celsius = scale === 'f' ? tryConvert(temperature, toCelsius) : temperature;
+    const fahrenheit = scale === 'c' ? tryConvert(temperature, toFahrenheit) : temperature;
+console.log('render(Calculator_)')
+    return (
+      <div>{console.log('render(Calculator_(return))')}
+        <TemperatureInput scale="c" temperature={celsius} onTemperatureChange={this.handleCelsiusChange} />
+        <TemperatureInput scale="f" temperature={fahrenheit} onTemperatureChange={this.handleFahrenheitChange} />
+        <BoilingVerdict celsius={parseFloat(celsius)} />
+      </div>
+    )
+  }
+}
+
+ReactDOM.render(<Calculator_ />, document.getElementById('root10_'))
+
+
+
+// 11. Composition vs Inheritance
