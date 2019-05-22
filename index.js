@@ -245,7 +245,7 @@ class Clock extends React.Component {
   }
 
   tick = () => {
-    console.log(this.timerID);
+    // console.log(this.timerID);
     this.setState({date: new Date()});
   }
 
@@ -322,7 +322,7 @@ ReactDOM.render(<ActionLink />, document.getElementById('root06'));
 class Toggle extends React.Component {
   constructor(props) {
     super(props);
-    console.log('constructor')
+    // console.log('constructor')
     this.state = {isToggleOn: true}
     this.handleClick = this.handleClick.bind(this)
   }
@@ -335,8 +335,8 @@ class Toggle extends React.Component {
   }
 
   render() {
-    console.log('render')
-    console.log(this.state.isToggleOn)
+    // console.log('render')
+    // console.log(this.state.isToggleOn)
     return (
       <div>
         <h3>Toggle Button</h3>
@@ -470,7 +470,7 @@ class LoginStatus extends React.Component {
 
   render() {
     let isLoggedIn = this.state.isLoggedIn
-    console.log('this.state.isLoggedIn @ LoginStatus render():', this.state.isLoggedIn)
+    // console.log('this.state.isLoggedIn @ LoginStatus render():', this.state.isLoggedIn)
     return (
       <div>
         {isLoggedIn ? (
@@ -487,7 +487,7 @@ class LoginStatus extends React.Component {
 ReactDOM.render(<div><LoginStatus /></div>, document.getElementById('root07___'))
 
 function WarningBanner(props) {
-  console.log("WarningBanner function")
+  // console.log("WarningBanner function")
   if(!props.warn) {
     return null;
   }
@@ -503,19 +503,19 @@ class Page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {showWarning: false}
-    console.log('constructor')
+    // console.log('constructor')
   }
 
   handleToggleClick = () => {
-    console.log('handleToggleClick')
+    // console.log('handleToggleClick')
     this.setState(state => ({
       showWarning: !state.showWarning
     }));
   }
 
   render() {
-    console.log('render')
-    console.log(this.state.showWarning)
+    // console.log('render')
+    // console.log(this.state.showWarning)
     return (
       <div>
         <WarningBanner warn={this.state.showWarning} />
@@ -534,10 +534,10 @@ ReactDOM.render(<Page />, document.getElementById('root07____'))
 // 8. Lists and Keys
 const numbers = [1, 2, 3, 4, 5];
 const doubles = numbers.map(num => num * 2);
-console.log(doubles)
+// console.log(doubles)
 
 const listItems = numbers.map((num, index) => {
-  console.log('listItem', index)
+  // console.log('listItem', index)
   return (
     <li key={index}>{num}</li>
   )
@@ -547,7 +547,7 @@ ReactDOM.render(<div><h1>08. Lists and Keys</h1><ul style={{textAlign:'left'}}>{
 
 function ListItem(props) {
   const value = props.value;
-  console.log('ListItem', props)
+  // console.log('ListItem', props)
   return (
     <li>{value}</li>
   )
@@ -556,7 +556,7 @@ function ListItem(props) {
 function NumberList(props) {
   const numbers = props.numbers;
   const listItems = numbers.map((num) => {
-    console.log('key & value:', num.toString(), '&', num); 
+    // console.log('key & value:', num.toString(), '&', num); 
     return <ListItem key={num.toString()} value={num} />
   });
 
@@ -803,15 +803,15 @@ const scaleNames = {
 class TemperatureInput extends React.Component {
   handleChange = (e) => {
     // before: this.setState({temperature: e.target.value});
-    this.props.onTemperatureChange(e.target.value);console.log('handleChange', this.props)
+    this.props.onTemperatureChange(e.target.value); //console.log('handleChange', this.props)
   }
 
-  render() {console.log('TemperatureInput',this.props)
+  render() {/*console.log('TemperatureInput',this.props)*/
     // before: const temperature = this.state.temperature;
     const temperature = this.props.temperature;
-    const scale = this.props.scale; console.log('render(TemperatureInput)')
+    const scale = this.props.scale; //console.log('render(TemperatureInput)')
     return (
-      <fieldset>{console.log('render(TemperatureInput(return))')}
+      <fieldset>{/*console.log('render(TemperatureInput(return))')*/}
         <legend>Enter temperature in {scaleNames[scale]}:</legend>
         <input value={temperature} onChange={this.handleChange} />
       </fieldset>
@@ -831,7 +831,7 @@ function tryConvert(temperature, convert) {
     return "";
   }
   const output = convert(input);
-  const rounded = Math.round(output * 1000) / 1000;console.log('tryConvert')
+  const rounded = Math.round(output * 1000) / 1000; //console.log('tryConvert')
   return rounded.toString();
 }
 
@@ -842,21 +842,21 @@ class Calculator_ extends React.Component {
   }
 
   handleCelsiusChange = (temperature) => {
-    this.setState({scale: 'c', temperature: temperature});console.log('handleCelsiusChange', this.state)
+    this.setState({scale: 'c', temperature: temperature}); //console.log('handleCelsiusChange', this.state)
   }
 
   handleFahrenheitChange = (temperature) => {
-    this.setState({scale: 'f', temperature: temperature});console.log('handleFahrenheitChange', this.state)
+    this.setState({scale: 'f', temperature: temperature}); //console.log('handleFahrenheitChange', this.state)
   }
 
   render() {
-    const scale = this.state.scale;console.log(scale)
-    const temperature = this.state.temperature;console.log(temperature)
+    const scale = this.state.scale; //console.log(scale)
+    const temperature = this.state.temperature; //console.log(temperature)
     const celsius = scale === 'f' ? tryConvert(temperature, toCelsius) : temperature;
     const fahrenheit = scale === 'c' ? tryConvert(temperature, toFahrenheit) : temperature;
-console.log('render(Calculator_)')
+// console.log('render(Calculator_)')
     return (
-      <div>{console.log('render(Calculator_(return))')}
+      <div>{/*console.log('render(Calculator_(return))')*/}
         <TemperatureInput scale="c" temperature={celsius} onTemperatureChange={this.handleCelsiusChange} />
         <TemperatureInput scale="f" temperature={fahrenheit} onTemperatureChange={this.handleFahrenheitChange} />
         <BoilingVerdict celsius={parseFloat(celsius)} />
@@ -958,3 +958,214 @@ class SignUpDialog extends React.Component {
 }
 
 ReactDOM.render(<SignUpDialog />, document.getElementById('root11__'));
+
+
+
+// 12. Thinking In React
+function Title() {
+  return <h1>12. Thinking In React</h1>;
+}
+ReactDOM.render(<Title />, document.getElementById('root12'));
+
+class ProductCategoryRow extends React.Component {
+  render() {
+    const category = this.props.category;
+    return (
+      <tr key={category}>
+        <th colSpan="2">
+          {category}
+        </th>
+      </tr>
+    );
+  }
+}
+
+class ProductRow extends React.Component {
+  render() {
+    // console.log(this.props);
+    const product = this.props.product;
+    // console.log(product);
+    const name = product.stocked ? product.name : <span style={{color:'red'}}>{product.name}</span>;
+
+    return (
+      <tr key={name}>
+        <td>{name}</td>
+        <td>{product.price}</td>
+      </tr>
+    );
+  }
+}
+
+class ProductTable extends React.Component {
+  render() {
+    let products = this.props.products;
+    let categories = products.map(product => product.category);
+    let uniqueCategories = categories.filter((value, index) => categories.indexOf(value) === index);
+    let currentCatagory = "";
+    let sportingGoods = [];
+    let electronics = [];
+
+    products.forEach((product, i) => {
+      if(currentCatagory !== product.category) { // checking whether it is a different category from the former one
+        currentCatagory = product.category; // if different, set the different category as currentCategory
+        if(categories.indexOf(product.category) === i) { // checking whether this different category product appears the first time in the category
+          // if the first time...
+          // add category header row to array
+
+          // add product list row to array
+
+        } else { // if not the first time...
+          // add product list row to array
+
+        }
+          // <ProductCategoryRow
+          //   category={product.category}
+          //   key={product.category} 
+          // />
+        // this['category_'+i].push(<tr><td>Table Body: {product.name}</td></tr>
+          // <ProductRow
+          //   product={product}
+          //   key={product.name} 
+          // />
+        // );
+      } else {
+        
+        // this['category_'+i].push(<tr><td>Table Body: {product.name}</td></tr>
+          // <ProductRow
+          //   product={product}
+          //   key={product.name} 
+          // />
+        // );
+      }
+        // console.log(i, product.category)
+        // let catName = product.category.toString()
+        // console.log('category name', catName)
+        // catName = [];
+        // console.log('category array', catName)
+        // catName.push()
+
+    })
+    
+
+    // const rows = this.props.products.map((product, i) => {
+    //   // console.log(product.category)
+    //   // const {product.category} = [];
+    //   // console.log(count0)
+
+    //   let categorizedRows = {};
+    //   console.log('categorizedRows beginning', categorizedRows)
+      
+    //   if(categories.indexOf(product.category) === i) {
+    //     categorizedRows.productCategory = (
+    //       // <tr key={product.category}><td>Category Header</td></tr>
+    //       <ProductCategoryRow
+    //         category={product.category}
+    //         key={product.productCategory} 
+    //       />
+    //     );
+    //     console.log('category header', categorizedRows.productCategory)
+
+    //     categorizedRows.productList = (
+    //     // <tr key={product.name}><td>Product List</td></tr>
+    //       <ProductRow
+    //         product={product}
+    //         key={product.name}
+    //       />
+    //     )
+    //     console.log('product list', categorizedRows.productList)
+
+    //   } 
+    //   else {
+    //     categorizedRows.productList = (
+    //     // <tr key={product.name}><td>Product List</td></tr>
+    //       <ProductRow
+    //         product={product}
+    //         key={product.name}
+    //       />
+    //     )
+    //     console.log('existing category', categorizedRows.productList)
+    //   }
+    //   console.log("Adding to categorizedRows", categorizedRows)
+    //   return categorizedRows;
+    // });
+
+    // // console.log('final categorizedRows', categorizedRows)
+    // console.log('rows', rows)
+    // console.log('rows', rows[0].productList)
+
+    // const r = [];
+    // rows.forEach(row => {
+    //   if(row.productCategory) {
+    //     r.push(row.productCategory);
+    //     r.push(row.productList);
+    //   } else {
+    //     r.push(row.productList);
+    //   }
+    // })
+
+    // console.log(r)
+
+    return (
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            rows
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+}
+
+// class CategoryCard extends React.Component {
+//   render() {
+//     return (
+//       <table>
+//         <tr>
+//           <th>{this.props.header}</th>
+//         </tr>
+//       </table>
+//     );
+//   }
+// }
+
+class SearchBar extends React.Component {
+  render() {
+    return (
+      <div>
+        <input type="text" />
+        <br />
+        <input type="checkbox" />
+        Only show products in stock
+      </div>
+    );
+  }
+}
+
+class FilterableProductTable extends React.Component {
+  render() {
+    return (
+      <div>{/*console.log(this.props)*/}
+        <SearchBar />
+        <ProductTable products={this.props.products} />
+      </div>
+    );
+  }
+}
+
+const PRODUCTS = [
+  {category: "Sporting Goods", price: "$49.99", stocked: true, name: "Football"},
+  {category: "Sporting Goods", price: "$29.99", stocked: false, name: "Basketball"},
+  {category: "Electronics", price: "$199.99", stocked: true, name: "Nexus 7"},
+  {category: "Electronics", price: "$99.99", stocked: true, name: "iPod Touch"},
+  {category: "Sporting Goods", price: "$9.99", stocked: true, name: "Baseball"},
+  {category: "Electronics", price: "$399.99", stocked: false, name: "iPhone 5"},
+];
+
+ReactDOM.render(<FilterableProductTable products={PRODUCTS} />, document.getElementById('root12_'));
