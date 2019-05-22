@@ -982,9 +982,7 @@ class ProductCategoryRow extends React.Component {
 
 class ProductRow extends React.Component {
   render() {
-    // console.log(this.props);
     const product = this.props.product;
-    // console.log(product);
     const name = product.stocked ? product.name : <span style={{color:'red'}}>{product.name}</span>;
 
     return (
@@ -998,162 +996,83 @@ class ProductRow extends React.Component {
 
 class ProductTable extends React.Component {
   render() {
-    let products = this.props.products;
-    let categories = products.map(product => product.category);
-    let uniqueCategories = categories.filter((value, index) => categories.indexOf(value) === index);
-    let currentCatagory = "";
-    let sportingGoods = [];
-    let electronics = [];
+    const filterText = this.props.filterText;
+    const inStockOnly = this.props.inStockOnly;
+    
+    const products = this.props.products;
+    const categories = products.map(product => product.category);
+    let categoryArrays =[];
 
     products.forEach((product, i) => {
-      if(currentCatagory !== product.category) { // checking whether it is a different category from the former one
-        currentCatagory = product.category; // if different, set the different category as currentCategory
-        if(categories.indexOf(product.category) === i) { // checking whether this different category product appears the first time in the category
-          // if the first time...
-          // add category header row to array
-
-          // add product list row to array
-
-        } else { // if not the first time...
-          // add product list row to array
-
-        }
-          // <ProductCategoryRow
-          //   category={product.category}
-          //   key={product.category} 
-          // />
-        // this['category_'+i].push(<tr><td>Table Body: {product.name}</td></tr>
-          // <ProductRow
-          //   product={product}
-          //   key={product.name} 
-          // />
-        // );
+      if(categories.indexOf(product.category) === i) {
+        categoryArrays[i] = [];
+        categoryArrays[i].push(
+          <ProductCategoryRow
+            category={product.category}
+            key={product.category} />
+        );
+        categoryArrays[i].push(
+          <ProductRow
+          product={product}
+          key={product.name} />
+        );
       } else {
-        
-        // this['category_'+i].push(<tr><td>Table Body: {product.name}</td></tr>
-          // <ProductRow
-          //   product={product}
-          //   key={product.name} 
-          // />
-        // );
+        let categoryId = categories.indexOf(product.category);
+        categoryArrays[categoryId].push(
+          <ProductRow
+          product={product}
+          key={product.name} />
+        );
       }
-        // console.log(i, product.category)
-        // let catName = product.category.toString()
-        // console.log('category name', catName)
-        // catName = [];
-        // console.log('category array', catName)
-        // catName.push()
-
     })
-    
 
-    // const rows = this.props.products.map((product, i) => {
-    //   // console.log(product.category)
-    //   // const {product.category} = [];
-    //   // console.log(count0)
-
-    //   let categorizedRows = {};
-    //   console.log('categorizedRows beginning', categorizedRows)
-      
-    //   if(categories.indexOf(product.category) === i) {
-    //     categorizedRows.productCategory = (
-    //       // <tr key={product.category}><td>Category Header</td></tr>
-    //       <ProductCategoryRow
-    //         category={product.category}
-    //         key={product.productCategory} 
-    //       />
-    //     );
-    //     console.log('category header', categorizedRows.productCategory)
-
-    //     categorizedRows.productList = (
-    //     // <tr key={product.name}><td>Product List</td></tr>
-    //       <ProductRow
-    //         product={product}
-    //         key={product.name}
-    //       />
-    //     )
-    //     console.log('product list', categorizedRows.productList)
-
-    //   } 
-    //   else {
-    //     categorizedRows.productList = (
-    //     // <tr key={product.name}><td>Product List</td></tr>
-    //       <ProductRow
-    //         product={product}
-    //         key={product.name}
-    //       />
-    //     )
-    //     console.log('existing category', categorizedRows.productList)
-    //   }
-    //   console.log("Adding to categorizedRows", categorizedRows)
-    //   return categorizedRows;
-    // });
-
-    // // console.log('final categorizedRows', categorizedRows)
-    // console.log('rows', rows)
-    // console.log('rows', rows[0].productList)
-
-    // const r = [];
-    // rows.forEach(row => {
-    //   if(row.productCategory) {
-    //     r.push(row.productCategory);
-    //     r.push(row.productList);
-    //   } else {
-    //     r.push(row.productList);
-    //   }
-    // })
-
-    // console.log(r)
+    const rows = [];
+    categoryArrays.forEach(array => {
+      if(array) {
+        array.forEach(e => rows.push(e))
+      }
+    });
 
     return (
       <div>
         <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            rows
-          </tbody>
+          <thead><tr><th>Name</th><th>Price</th></tr></thead>
+          <tbody>{rows}</tbody>
         </table>
       </div>
     );
   }
 }
 
-// class CategoryCard extends React.Component {
-//   render() {
-//     return (
-//       <table>
-//         <tr>
-//           <th>{this.props.header}</th>
-//         </tr>
-//       </table>
-//     );
-//   }
-// }
-
 class SearchBar extends React.Component {
   render() {
+    const filterText = this.props.filterText;
+    const inStockOnly = this.props.inStockOnly;
     return (
       <div>
-        <input type="text" />
-        <br />
-        <input type="checkbox" />
-        Only show products in stock
+        <input type="text" placeholder="Search..." value={filterText} />
+        <p>
+          <input type="checkbox" checked={inStockOnly} />
+          {' '} Only show products in stock
+        </p>
       </div>
     );
   }
 }
 
 class FilterableProductTable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filterText: '',
+      inStockOnly: false,
+    }
+  };
   render() {
     return (
-      <div>{/*console.log(this.props)*/}
-        <SearchBar />
-        <ProductTable products={this.props.products} />
+      <div>
+        <SearchBar filterText={this.state.filterText} inStockOnly={this.state.inStockOnly} />
+        <ProductTable products={this.props.products} filterText={this.state.filterText} inStockOnly={this.state.inStockOnly} />
       </div>
     );
   }
@@ -1166,6 +1085,12 @@ const PRODUCTS = [
   {category: "Electronics", price: "$99.99", stocked: true, name: "iPod Touch"},
   {category: "Sporting Goods", price: "$9.99", stocked: true, name: "Baseball"},
   {category: "Electronics", price: "$399.99", stocked: false, name: "iPhone 5"},
+  {category: "Food", price: "$1.99", stocked: true, name: "Cherry"},
+  {category: "Stationary", price: "$10.99", stocked: false, name: "Mechenical Pencil"},
+  {category: "Food", price: "$3.99", stocked: false, name: "Milk"},
+  {category: "Stationary", price: "$4.99", stocked: true, name: "Eraser Set"},
+  {category: "Stationary", price: "$1.99", stocked: true, name: "Glue"},
+  {category: "Food", price: "$0.99", stocked: true, name: "Banana"},
 ];
 
 ReactDOM.render(<FilterableProductTable products={PRODUCTS} />, document.getElementById('root12_'));
