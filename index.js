@@ -970,11 +970,10 @@ ReactDOM.render(<Title />, document.getElementById('root12'));
 class ProductCategoryRow extends React.Component {
   render() {
     const category = this.props.category;
+
     return (
-      <tr key={category}>
-        <th colSpan="2">
-          {category}
-        </th>
+      <tr>
+        <th colSpan="2">{category}</th>
       </tr>
     );
   }
@@ -986,9 +985,8 @@ class ProductRow extends React.Component {
     const name = product.stocked ? product.name : <span style={{color:'red'}}>{product.name}</span>;
 
     return (
-      <tr key={name}>
-        <td>{name}</td>
-        <td>{product.price}</td>
+      <tr>
+        <td>{name}</td><td>{product.price}</td>
       </tr>
     );
   }
@@ -998,46 +996,88 @@ class ProductTable extends React.Component {
   render() {
     const filterText = this.props.filterText;
     const inStockOnly = this.props.inStockOnly;
-    
-    const products = this.props.products;
-    const categories = products.map(product => product.category);
-    let categoryArrays =[];
 
-    products.forEach((product, i) => {
+    const products = this.props.products;
+    const rows = [];
+
+    // Sort only filterText products (default: all)
+    const filterTextProducts = products.filter(product => product.name.toLowerCase().includes(filterText.toLowerCase())); 
+
+    // for inStockOnly products
+    if(inStockOnly) { 
+      const inStockProducts = filterTextProducts.filter(product => product.stocked);
+      const inStockCategories = inStockProducts.map(product => product.category);
+      const inStockCategoryArrays =[];
+
+      inStockProducts.forEach((product, i) => {
+        let inStockCategoryId = inStockCategories.indexOf(product.category);
+        // When a new category, create an array for the category with a header row
+        if(inStockCategories.indexOf(product.category) === i) {
+          inStockCategoryArrays[i] = [];
+          inStockCategoryArrays[inStockCategoryId].push(
+            <ProductCategoryRow
+              category={product.category}
+              key={product.category}
+            />
+          ); 
+        }
+        // Add the item to the array for its category
+        inStockCategoryArrays[inStockCategoryId].push(
+          <ProductRow
+          product={product}
+          key={product.name} />
+        ); 
+      })
+  
+      // Merge all elements in arrays in inStockCategoryArrays to the rows array
+      inStockCategoryArrays.forEach(array => {
+        if(array) {
+          array.forEach(e => rows.push(e))
+        }
+      });
+    } 
+
+    // for all products
+    else 
+    { 
+      const categories = filterTextProducts.map(product => product.category);
+      const categoryArrays =[];
+
+      filterTextProducts.forEach((product, i) => {
+      let categoryId = categories.indexOf(product.category);
+      // When a new category, create an array for the category with a header row
       if(categories.indexOf(product.category) === i) {
         categoryArrays[i] = [];
-        categoryArrays[i].push(
+        categoryArrays[categoryId].push(
           <ProductCategoryRow
             category={product.category}
-            key={product.category} />
-        );
-        categoryArrays[i].push(
-          <ProductRow
-          product={product}
-          key={product.name} />
-        );
-      } else {
-        let categoryId = categories.indexOf(product.category);
-        categoryArrays[categoryId].push(
-          <ProductRow
-          product={product}
-          key={product.name} />
-        );
+            key={product.category}
+          />
+        ); 
       }
+      // Add the item to the array for its category
+      categoryArrays[categoryId].push(
+        <ProductRow
+        product={product}
+        key={product.name} />
+      ); 
     })
 
-    const rows = [];
+    // Merge all elements in arrays in categoryArrays to the rows array
     categoryArrays.forEach(array => {
       if(array) {
         array.forEach(e => rows.push(e))
       }
     });
+    }
 
     return (
       <div>
         <table>
           <thead><tr><th>Name</th><th>Price</th></tr></thead>
-          <tbody>{rows}</tbody>
+          <tbody>
+            {rows}
+          </tbody>
         </table>
       </div>
     );
@@ -1045,17 +1085,36 @@ class ProductTable extends React.Component {
 }
 
 class SearchBar extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  handleFilterTextChange = (e) => {
+    this.props.onFilterTextChange(e.target.value);
+  }
+  
+  handleInStockChange = (e) => {
+    this.props.onInStockChange(e.target.checked);
+  }
+
   render() {
-    const filterText = this.props.filterText;
-    const inStockOnly = this.props.inStockOnly;
     return (
-      <div>
-        <input type="text" placeholder="Search..." value={filterText} />
+      <form className="searchbar">
+        <input 
+          type="text" 
+          placeholder="Search..." 
+          value={this.props.filterText}  
+          onChange={this.handleFilterTextChange}
+        />
         <p>
-          <input type="checkbox" checked={inStockOnly} />
+          <input 
+            type="checkbox"  
+            checked={this.props.inStockOnly}
+            onChange={this.handleInStockChange}
+          />
           {' '} Only show products in stock
         </p>
-      </div>
+      </form>
     );
   }
 }
@@ -1065,14 +1124,36 @@ class FilterableProductTable extends React.Component {
     super(props);
     this.state = {
       filterText: '',
-      inStockOnly: false,
+      inStockOnly: false
     }
   };
+
+  handleFilterTextChange = (filterText) => {
+    this.setState({
+      filterText: filterText
+    });
+  }
+  
+  handleInStockChange = (inStockOnly) => {
+    this.setState({
+      inStockOnly: inStockOnly
+    });
+  }
+
   render() {
     return (
       <div>
-        <SearchBar filterText={this.state.filterText} inStockOnly={this.state.inStockOnly} />
-        <ProductTable products={this.props.products} filterText={this.state.filterText} inStockOnly={this.state.inStockOnly} />
+        <SearchBar 
+          filterText={this.state.filterText} 
+          inStockOnly={this.state.inStockOnly} 
+          onFilterTextChange={this.handleFilterTextChange}
+          onInStockChange={this.handleInStockChange}
+        />
+        <ProductTable 
+          products={this.props.products} 
+          filterText={this.state.filterText} 
+          inStockOnly={this.state.inStockOnly} 
+        />
       </div>
     );
   }
@@ -1090,7 +1171,7 @@ const PRODUCTS = [
   {category: "Food", price: "$3.99", stocked: false, name: "Milk"},
   {category: "Stationary", price: "$4.99", stocked: true, name: "Eraser Set"},
   {category: "Stationary", price: "$1.99", stocked: true, name: "Glue"},
-  {category: "Food", price: "$0.99", stocked: true, name: "Banana"},
+  {category: "Food", price: "$0.99", stocked: true, name: "Banana"}
 ];
 
 ReactDOM.render(<FilterableProductTable products={PRODUCTS} />, document.getElementById('root12_'));
